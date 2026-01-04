@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mystery Box Lucky</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif; text-align: center; 
+            background-color: #1a1a2e; color: white; margin: 0; padding: 20px;
+            user-select: none;
+        }
+        .container { max-width: 450px; margin: auto; background: #16213e; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        
+        /* Area Mystery Box */
+        .box-wrapper {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 40px auto;
+            perspective: 1000px;
+        }
+
+        #mystery-box {
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        /* Animasi Getar */
+        .shake {
+            animation: shake 0.5s infinite;
+        }
+
+        @keyframes shake {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(5deg); }
+            50% { transform: rotate(0eg); }
+            75% { transform: rotate(-5deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        /* Animasi Terbuka (Zoom) */
+        .open-box {
+            animation: open 0.8s forwards;
+        }
+
+        @keyframes open {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.2); opacity: 0; visibility: hidden; }
+        }
+
+        #reward-display {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 40px;
+            font-weight: bold;
+            color: #f1c40f;
+            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 5;
+        }
+
+        #reward-display.show {
+            transform: translate(-50%, -50%) scale(1.5);
+        }
+
+        button { 
+            padding: 15px 40px; font-size: 18px; font-weight: bold; cursor: pointer;
+            background-color: #e94560; color: white; border: none; border-radius: 50px;
+            box-shadow: 0 4px 0 #a22a3e; transition: 0.2s; margin-top: 20px;
+        }
+
+        button:disabled { 
+            background-color: #555 !important; 
+            box-shadow: none !important;
+            cursor: not-allowed;
+        }
+
+        #loginBtnContainer { margin-top: 20px; display: none; }
+        .btn-login-main {
+            display: inline-block; padding: 15px 40px; font-size: 18px; font-weight: bold;
+            background-color: #f1c40f; color: #000; text-decoration: none; border-radius: 50px;
+            box-shadow: 0 4px 0 #c29d0b;
+        }
+
+        /* Modal Style */
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); }
+        .modal-content { background: white; color: #333; margin: 20% auto; padding: 30px; border-radius: 15px; width: 85%; max-width: 380px; }
+        .btn-link { display: inline-block; margin-top: 20px; padding: 12px 25px; background: #f1c40f; color: black; text-decoration: none; font-weight: bold; border-radius: 5px; }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <div class="container">
+        <h2>🎁 Mystery Box</h2>
+        <p>Klik kotak di bawah untuk melihat hadiahmu!</p>
+        
+        <div class="box-wrapper">
+            <img id="mystery-box" src="https://cdn-icons-png.flaticon.com/512/679/679821.png" alt="Mystery Box" onclick="openBox()">
+            <div id="reward-display"></div>
+        </div>
+        
+        <button id="actionBtn" onclick="openBox()">BUKA KOTAK</button>
+        
+        <div id="loginBtnContainer">
+            <a href="https://shortio.link/login-kesawanbola" class="btn-login-main">LOGIN & KLAIM SEKARANG</a>
+        </div>
+
+        <h3 id="resultText" style="color:#f1c40f; margin-top:20px;"></h3>
+    </div>
+
+    <div id="resultModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle"></h2>
+            <p id="modalMsg"></p>
+            <a href="https://shortio.link/login-kesawanbola" class="btn-link">LOGIN & KLAIM SEKARANG</a>
+        </div>
+    </div>
+
+    <script>
+        const mysteryBox = document.getElementById('mystery-box');
+        const rewardDisplay = document.getElementById('reward-display');
+        const actionBtn = document.getElementById('actionBtn');
+        const loginContainer = document.getElementById('loginBtnContainer');
+        const resultText = document.getElementById('resultText');
+
+        const prizes = ["ZONK", "50K", "ZONK", "100K", "ZONK", "500K"];
+
+        function checkStatus() {
+            if (localStorage.getItem("boxDone") === "true") {
+                actionBtn.disabled = true;
+                actionBtn.innerText = "SUDAH DIKLAIM";
+                mysteryBox.style.opacity = "0.5";
+                mysteryBox.style.cursor = "default";
+                loginContainer.style.display = "block";
+                mysteryBox.onclick = null;
+            }
+        }
+
+        function openBox() {
+            if (localStorage.getItem("boxDone") === "true") return;
+
+            // 1. Tambahkan efek getar
+            mysteryBox.classList.add('shake');
+            actionBtn.disabled = true;
+            actionBtn.innerText = "MEMBUKA...";
+
+            // 2. Beri jeda seolah-olah sedang diproses (2 detik)
+            setTimeout(() => {
+                mysteryBox.classList.remove('shake');
+                mysteryBox.classList.add('open-box');
+                
+                // Pilih hadiah secara acak
+                const targetIdx = Math.floor(Math.random() * prizes.length);
+                const hasil = prizes[targetIdx];
+
+                // 3. Tampilkan Teks Hadiah
+                rewardDisplay.innerText = hasil;
+                rewardDisplay.classList.add('show');
+                
+                finalizeGame(targetIdx, hasil);
+            }, 2000);
+        }
+
+        function finalizeGame(idx, hasil) {
+            localStorage.setItem("boxDone", "true");
+            resultText.innerText = "HADIAH ANDA: " + hasil;
+            loginContainer.style.display = "block";
+
+            setTimeout(() => {
+                const modal = document.getElementById('resultModal');
+                const title = document.getElementById('modalTitle');
+                const msg = document.getElementById('modalMsg');
+
+                if (hasil !== "ZONK") {
+                    title.innerText = "🎉 SELAMAT!";
+                    title.style.color = "green";
+                    msg.innerHTML = `Bosku Berhasil Mendapatkan <b>HADIAH ${hasil}</b>! Silahkan login untuk klaim ke CS.`;
+                } else {
+                    title.innerText = "💔 YAHH...";
+                    title.style.color = "red";
+                    msg.innerText = "MAAF, KOTAK INI KOSONG. COBA LAGI DI KESEMPATAN BERIKUTNYA!";
+                }
+                modal.style.display = "block";
+            }, 1000);
+        }
+
+        checkStatus();
+
+        // Security sama seperti sebelumnya
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.onkeydown = e => { if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && [73, 74, 67].includes(e.keyCode)) || (e.ctrlKey && e.keyCode == 85)) return false; };
+    </script>
+</body>
+</html>
