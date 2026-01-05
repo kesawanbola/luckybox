@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mystery Box Lucky - KesawanBola</title>
+    <title>Luckybox - Kotak Keberuntungan</title>
     <style>
         body {
             font-family: 'Segoe UI', sans-serif; text-align: center; 
@@ -89,7 +89,7 @@
 <body oncontextmenu="return false;">
 
     <div class="container">
-        <h2 style="color: #f1c40f;">🎁 Mystery Box Lucky</h2>
+        <h2 style="color: #f1c40f;">🎁 Luckybox 🎁</h2>
         <p>Pilih satu kotak keberuntunganmu hari ini!</p>
         
         <div class="box-wrapper">
@@ -113,7 +113,7 @@
             <div id="activationNote" style="display:none; background:#f8f9fa; padding:15px; border-radius:10px; margin-top:15px; font-size:14px; color:#444; border-left: 5px solid #f1c40f; text-align: left;">
                 <strong>Cara Aktivasi Hadiah:</strong><br>
                 1. Login ke akun KesawanBola.<br>
-                2. Lakukan deposit (Min. Rp 10.000).<br>
+                2. Lakukan deposit (Min. Rp 20.000).<br>
                 3. Saldo hadiah otomatis terbuka!
             </div>
             <a href="https://shortio.link/login-kesawanbola" class="btn-link">LOGIN KE AKUN</a>
@@ -170,9 +170,9 @@
                 if (hasil !== "ZONK") {
                     title.innerText = "🎉 ANDA MENANG!";
                     title.style.color = "#27ae60";
-                    msg.innerHTML = `Selamat! Anda mendapatkan <b>Rp ${hasil}</b>.<br><br>Status Hadiah: <span style="color:red; font-weight:bold;">TERKUNCI</span>`;
+                    msg.innerHTML = `Selamat! Anda mendapatkan <b>Bonus Kemenangan Rp ${hasil}</b>.<br><br>Status Hadiah: <span style="color:red; font-weight:bold;">TERKUNCI</span>`;
                     note.style.display = "block";
-                    resultText.innerHTML = `HASIL: Rp ${hasil} <br><small>(Status: <span class="status-badge">Menunggu Deposit</span>)</small>`;
+                    resultText.innerHTML = `HASIL: Rp ${hasil} <br><small>(Status: <span class="status-badge">Menunggu Deposit minimal 20rb</span>)</small>`;
                 } else {
                     title.innerText = "💔 COBA LAGI";
                     title.style.color = "#e74c3c";
